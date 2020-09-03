@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1920
     height: 997
   m_ShowMode: 4
-  m_Title: Console
+  m_Title: Game
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -122,7 +122,7 @@ MonoBehaviour:
   m_MinSize: {x: 679, y: 342}
   m_MaxSize: {x: 12004, y: 8042}
   vertical: 0
-  controlID: 96
+  controlID: 55
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -147,7 +147,7 @@ MonoBehaviour:
   m_MinSize: {x: 403, y: 342}
   m_MaxSize: {x: 8003, y: 8042}
   vertical: 1
-  controlID: 101
+  controlID: 56
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -172,7 +172,7 @@ MonoBehaviour:
   m_MinSize: {x: 403, y: 221}
   m_MaxSize: {x: 8003, y: 4021}
   vertical: 0
-  controlID: 102
+  controlID: 57
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -398,9 +398,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 14e9ffff
-      m_LastClickedID: -5868
-      m_ExpandedIDs: 58f5ffff74f8ffff92f8ffff40f9ffff60fbffff4c3d0000
+      m_SelectedIDs: 5a370000
+      m_LastClickedID: 14170
+      m_ExpandedIDs: 60fbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: Player(Clone)
@@ -411,10 +411,10 @@ MonoBehaviour:
           y: 0
           width: 0
           height: 0
-        m_UserData: -5868
+        m_UserData: -4638
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
-        m_OriginalEventType: 0
+        m_OriginalEventType: 4
         m_IsRenamingFilename: 0
         m_ClientGUIView: {fileID: 8}
       m_SearchString: 
@@ -460,9 +460,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 0, y: 25, z: 0}
+    m_Target: {x: 4.811349, y: -3.5771093, z: 8.400158}
     speed: 2
-    m_Value: {x: -18.197329, y: 1.7908146, z: 21.336658}
+    m_Value: {x: 4.811349, y: -3.5771093, z: 8.400158}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -509,13 +509,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.03219031, y: 0.92082614, z: -0.077815376, w: 0.3807927}
+    m_Target: {x: 0.1979625, y: 0.672438, z: -0.19394687, w: 0.6863233}
     speed: 2
-    m_Value: {x: 0.032190066, y: 0.9208191, z: -0.07781478, w: 0.38078982}
+    m_Value: {x: 0.1979608, y: 0.67243224, z: -0.1939452, w: 0.6863174}
   m_Size:
     m_Target: 10
     speed: 2
-    m_Value: 1.102271
+    m_Value: 10
   m_Ortho:
     m_Target: 0
     speed: 2

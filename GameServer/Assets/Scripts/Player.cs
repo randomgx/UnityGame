@@ -194,22 +194,14 @@ public class Player : MonoBehaviour
                     RoundManager.instance.EndRound(Team.Bystander);
                 }
             }
-            else if(team == Team.Detective)
+            else if(team == Team.Bystander)
             {
-                RoundManager.instance.EndRound(Team.Murderer);
-            }
-            /*
-            else if(team == Team.Bystander || team == Team.Detective)
-            {
-                if (carryingWeapon)
-                    DropWeapon();
-
                 RoundManager.instance.bystandersAlive--;
                 if (RoundManager.instance.bystandersAlive <= 0)
                 {
                     RoundManager.instance.EndRound(Team.Murderer);
                 }
-            }*/
+            }
         }
         ServerSend.PlayerHealth(this);
     }

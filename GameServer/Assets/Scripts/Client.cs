@@ -215,6 +215,7 @@ public class Client
         player = NetworkManager.instance.InstantiatePlayer();
         player.Initialize(id, _playerName);
 
+        /*
         // Send all players to the new player
         foreach (Client _client in Server.clients.Values)
         {
@@ -225,7 +226,7 @@ public class Client
                     ServerSend.SpawnPlayer(id, _client.player);
                 }
             }
-        }
+        }*/
 
         // Send the new player to all players (including himself)
         foreach (Client _client in Server.clients.Values)
@@ -236,11 +237,6 @@ public class Client
                 RoundManager.instance.currentPlayers = RoundManager.instance.GetPlayerCount();
             }
         }
-
-        foreach (ItemSpawner _itemSpawner in ItemSpawner.spawners.Values)
-        {
-            ServerSend.CreateItemSpawner(id, _itemSpawner.spawnerId, _itemSpawner.transform.position, _itemSpawner.hasItem);
-        }
     }
 
     /// <summary>Disconnects the client and stops all network traffic.</summary>
@@ -250,7 +246,10 @@ public class Client
 
         ThreadManager.ExecuteOnMainThread(() =>
         {
-            UnityEngine.Object.Destroy(player.gameObject);
+            if(player != null)
+            {
+                UnityEngine.Object.Destroy(player.gameObject);
+            }
             player = null;
         });
 

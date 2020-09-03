@@ -6,6 +6,9 @@ public class PlayerManager : MonoBehaviour
 {
     public int id;
     public string username;
+
+    public TextMesh usernameText;
+
     public float health;
     public float maxHealth = 100f;
     public int itemCount = 0;
@@ -39,6 +42,7 @@ public class PlayerManager : MonoBehaviour
     {
         id = _id;
         username = _username;
+        usernameText.text = username;
         health = maxHealth;
     }
 

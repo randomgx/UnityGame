@@ -238,8 +238,6 @@ public class ServerSend
         }
     }
 
-    //Sending that information to everyone on the server...maybe change that later to avoid hacks.
-
     public static void RoundMurderer(int _id)
     {
         using (Packet _packet = new Packet((int)ServerPackets.roundMurderer))

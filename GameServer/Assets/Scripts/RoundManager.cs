@@ -3,21 +3,37 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+public class WaitingPlayers
+{
+    public int id;
+    public string username;
+}
+
 public class RoundManager : MonoBehaviour
 {
     public static RoundManager instance;
+
+    public List<WaitingPlayers> waitingPlayers = new List<WaitingPlayers>();
 
     public int currentPlayers;
     public int minimumPlayers = 3;
 
     private bool countdownStarted;
     public float countdownTime = 30;
-    [HideInInspector]
     public float countdownCurrentTimer;
+
     private int murdererPlayer;
     private int detectivePlayer;
 
+    public int murderersQuantity;
+    public int detectivesQuantity;
+
+    public List<int> murdererPlayers = new List<int>();
+    public List<int> detectivePlayers = new List<int>();
+    public List<int> availPlayersId = new List<int>();
+
     public int murderersAlive;
+    public int detectivesAlive;
     public int bystandersAlive;
 
     public enum RoundState
@@ -62,6 +78,16 @@ public class RoundManager : MonoBehaviour
         {
             case RoundState.WAITING:
                 rState = RoundState.WAITING;
+
+                if (waitingPlayers.Count > 0)
+                {
+                    foreach (WaitingPlayers _player in waitingPlayers)
+                    {
+                        Server.clients[_player.id].SendIntoGame(_player.username);
+                        waitingPlayers.Remove(_player);
+                    }
+                }
+
                 ServerSend.RoundState((int)rState);
 
                 if (GetPlayerCount() >= minimumPlayers)
@@ -108,21 +134,64 @@ public class RoundManager : MonoBehaviour
         return p;
     }
 
+    public void UpdateAvailablePlayersIds()
+    {
+        foreach (Client _client in Server.clients.Values)
+        {
+            if (_client.player != null && _client.player.team == Player.Team.Bystander)
+            {
+                availPlayersId.Add(_client.id);
+            }
+        }
+    }
+
     public void SelectTeams()
     {
-        murdererPlayer = Random.Range(1, GetPlayerCount() + 1);
-        detectivePlayer = Random.Range(1, GetPlayerCount() + 1);
+        for(int i = 0; murdererPlayers.Count < murderersQuantity; i++)
+        {
+            UpdateAvailablePlayersIds();
+            murderersAlive++;
+            int _id = Random.Range(1, availPlayersId.Count);
+            murdererPlayers.Add(availPlayersId[_id]);
 
-        if(murdererPlayer == detectivePlayer)
-        {
-            SelectTeams();
-            Debug.Log("Murderer and Detective was the same id. Running again...");
+            if (Server.clients[murdererPlayers[murdererPlayers.Count-1]].player != null)
+            {
+                murdererPlayer = Server.clients[murdererPlayers[murdererPlayers.Count - 1]].id;
+                Server.clients[murdererPlayer].player.team = Player.Team.Murderer;
+                Server.clients[murdererPlayer].player.hitRange = 2f;
+                Server.clients[murdererPlayer].player.carryingWeapon = true;
+                availPlayersId.Clear();
+                ServerSend.RoundMurderer(murdererPlayer);
+            }
+            else
+            {
+                Debug.Log("Murderer player id is not connected.");
+            }
         }
-        else
+
+        for (int i = 0; detectivePlayers.Count < detectivesQuantity; i++)
         {
-            Debug.Log("Found a murderer! Id " + (murdererPlayer));
-            Debug.Log("Found a detective! Id " + (detectivePlayer));
+            UpdateAvailablePlayersIds();
+            detectivesAlive++;
+            int _id = Random.Range(1, availPlayersId.Count);
+            detectivePlayers.Add(availPlayersId[_id]);
+
+            if (Server.clients[detectivePlayers[detectivePlayers.Count - 1]].player != null)
+            {
+                detectivePlayer = Server.clients[detectivePlayers[detectivePlayers.Count - 1]].id;
+                Server.clients[detectivePlayer].player.team = Player.Team.Detective;
+                Server.clients[detectivePlayer].player.hitRange = 30f;
+                Server.clients[detectivePlayer].player.carryingWeapon = true;
+                availPlayersId.Clear();
+                ServerSend.RoundDetective(detectivePlayer);
+            }
+            else
+            {
+                Debug.Log("Murderer player id is not connected.");
+            }
         }
+
+        UpdateAvailablePlayersIds();
     }
 
     /// <summary>
@@ -163,34 +232,6 @@ public class RoundManager : MonoBehaviour
 
         SelectTeams();
 
-        if (Server.clients[murdererPlayer].player != null)
-        {
-            Server.clients[murdererPlayer].player.team = Player.Team.Murderer;
-            Server.clients[murdererPlayer].player.hitRange = 1.5f;
-            Server.clients[murdererPlayer].player.carryingWeapon = true;
-            murderersAlive++;
-            ServerSend.RoundMurderer(murdererPlayer); //need to change that later, maybe we're selecting an id that is not on the server anymore
-        }
-        else
-        {
-            Debug.Log("Murderer player id is not connected.");
-            SelectTeams();
-        }
-
-        if (Server.clients[detectivePlayer].player != null && Server.clients[detectivePlayer].player.team != Player.Team.Murderer)
-        {
-            Server.clients[detectivePlayer].player.team = Player.Team.Detective;
-            Server.clients[detectivePlayer].player.hitRange = 30f;
-            Server.clients[detectivePlayer].player.carryingWeapon = true;
-            bystandersAlive++;
-            ServerSend.RoundDetective(detectivePlayer); //need to change that later, maybe we're selecting an id that is not on the server anymore
-        }
-        else
-        {
-            Debug.Log("Detective player id is not connected.");
-            SelectTeams();
-        }
-
         foreach (Client _client in Server.clients.Values)
         {
             if (_client.player != null && _client.player.team == Player.Team.Bystander)
@@ -219,6 +260,10 @@ public class RoundManager : MonoBehaviour
         countdownCurrentTimer = countdownTime;
         bystandersAlive = 0;
         murderersAlive = 0;
+        detectivesAlive = 0;
+        murdererPlayers.Clear();
+        detectivePlayers.Clear();
+        availPlayersId.Clear();
 
         ServerSend.RoundState((int)rState);
 
@@ -232,6 +277,10 @@ public class RoundManager : MonoBehaviour
                 }
                 _client.player.team = Player.Team.Bystander;
                 _client.player.carryingWeapon = false;
+
+                _client.player.controller.enabled = false;
+                _client.player.transform.position = new Vector3(0f, 25f, 0f);
+                _client.player.controller.enabled = true;
 
                 ServerSend.DrawedWeapon(_client.id, 0, 0);
                 ServerSend.DrawedWeapon(_client.id, 0, 1);

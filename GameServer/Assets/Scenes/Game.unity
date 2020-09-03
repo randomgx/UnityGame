@@ -1921,8 +1921,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentPlayers: 0
   minimumPlayers: 3
-  countdownTime: 30
+  countdownTime: 20
   countdownCurrentTimer: 0
+  murderersQuantity: 1
+  detectivesQuantity: 1
+  murdererPlayers: 
+  detectivePlayers: 
+  availPlayersId: 
+  murderersAlive: 0
+  detectivesAlive: 0
+  bystandersAlive: 0
   rState: 0
 --- !u!1 &1040904477
 GameObject:
