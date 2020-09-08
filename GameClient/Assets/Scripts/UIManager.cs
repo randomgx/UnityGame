@@ -107,6 +107,7 @@ public class UIManager : MonoBehaviour
                 gameState = 4;
                 teamText.text = "";
                 topText.text = "Restarting round...";
+                GameManager.players[Client.instance.myId].carryingWeapon = false;
                 break;
         }
     }

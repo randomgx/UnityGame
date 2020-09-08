@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.XR.WSA.Input;
 
 public class WaitingPlayers
 {
@@ -70,6 +71,13 @@ public class RoundManager : MonoBehaviour
                 countdownCurrentTimer -= Time.deltaTime;
             }
         }
+
+        if(currentPlayers < minimumPlayers && rState == RoundState.PLAYING || currentPlayers < minimumPlayers && rState == RoundState.COUNTDOWN)
+        {
+            //if there's no detective/murder left
+            StopAllCoroutines();
+            OnChangeRoundState(RoundState.RESTART);
+        }
     }
 
     public void OnChangeRoundState(RoundState state)
@@ -83,10 +91,14 @@ public class RoundManager : MonoBehaviour
                 {
                     foreach (WaitingPlayers _player in waitingPlayers)
                     {
-                        Server.clients[_player.id].SendIntoGame(_player.username);
-                        waitingPlayers.Remove(_player);
+                        if(Server.clients[_player.id].player == null)
+                        {
+                            Server.clients[_player.id].SendIntoGame(_player.username);
+                        }
                     }
                 }
+
+                waitingPlayers.Clear();
 
                 ServerSend.RoundState((int)rState);
 
@@ -151,10 +163,10 @@ public class RoundManager : MonoBehaviour
         {
             UpdateAvailablePlayersIds();
             murderersAlive++;
-            int _id = Random.Range(1, availPlayersId.Count);
-            murdererPlayers.Add(availPlayersId[_id]);
+            int _id = Random.Range(1, availPlayersId.Count+1);
+            murdererPlayers.Add(availPlayersId[_id-1]);
 
-            if (Server.clients[murdererPlayers[murdererPlayers.Count-1]].player != null)
+            if (Server.clients[murdererPlayers[murdererPlayers.Count - 1]].player != null)
             {
                 murdererPlayer = Server.clients[murdererPlayers[murdererPlayers.Count - 1]].id;
                 Server.clients[murdererPlayer].player.team = Player.Team.Murderer;
@@ -173,8 +185,8 @@ public class RoundManager : MonoBehaviour
         {
             UpdateAvailablePlayersIds();
             detectivesAlive++;
-            int _id = Random.Range(1, availPlayersId.Count);
-            detectivePlayers.Add(availPlayersId[_id]);
+            int _id = Random.Range(1, availPlayersId.Count+1);
+            detectivePlayers.Add(availPlayersId[_id-1]);
 
             if (Server.clients[detectivePlayers[detectivePlayers.Count - 1]].player != null)
             {
@@ -190,8 +202,6 @@ public class RoundManager : MonoBehaviour
                 Debug.Log("Murderer player id is not connected.");
             }
         }
-
-        UpdateAvailablePlayersIds();
     }
 
     /// <summary>
@@ -224,13 +234,14 @@ public class RoundManager : MonoBehaviour
         {
             if (_client.player != null)
             {
-                ServerSend.RoundCountdown(_client.id, countdownCurrentTimer);
+                ServerSend.RoundCountdown(_client.id, countdownCurrentTimer+1);
             }
         }
 
         yield return new WaitForSeconds((countdownTime/3)*2);
 
         SelectTeams();
+        UpdateAvailablePlayersIds();
 
         foreach (Client _client in Server.clients.Values)
         {

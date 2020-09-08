@@ -14,6 +14,8 @@ public class PlayerManager : MonoBehaviour
     public int itemCount = 0;
     public MeshRenderer model;
 
+    public GameObject eye;
+
     public GameObject knife;
     public GameObject pistol;
 
@@ -58,7 +60,6 @@ public class PlayerManager : MonoBehaviour
         if(!interpolate)
         {
             transform.position = position.position;
-            return;
         }
         
         futureUpdates.Add(position);
@@ -109,6 +110,7 @@ public class PlayerManager : MonoBehaviour
 
         if (health <= 0f)
         {
+            interpolate = false;
             Die();
         }
     }
@@ -121,7 +123,7 @@ public class PlayerManager : MonoBehaviour
                 if (_weapon == 0)
                 {
                     pistol.SetActive(false);
-                    //pistolAnimator.SetBool("draw", false);
+                    pistolAnimator.SetBool("draw", false);
                 }
                 else if(_weapon == 1)
                 {
@@ -133,7 +135,7 @@ public class PlayerManager : MonoBehaviour
                 if (_weapon == 0)
                 {
                     pistol.SetActive(true);
-                    //pistolAnimator.SetBool("draw", true);
+                    pistolAnimator.SetBool("draw", true);
                 }
                 else if (_weapon == 1)
                 {
@@ -160,14 +162,24 @@ public class PlayerManager : MonoBehaviour
     public void Die()
     {
         model.enabled = false;
+        if (eye != null)
+        {
+            eye.SetActive(false);
+        }
         carryingWeapon = false;
-        if(activeWeapon != null)
-            activeWeapon.SetActive(false);
+        knife.SetActive(false);
+        pistol.SetActive(false);
     }
 
     public void Respawn()
     {
         model.enabled = true;
+        if(eye != null)
+        {
+            eye.SetActive(true);
+        }
+        carryingWeapon = false;
+        interpolate = true;
         SetHealth(maxHealth);
     }
 }

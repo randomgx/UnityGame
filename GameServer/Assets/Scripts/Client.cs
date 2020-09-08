@@ -249,6 +249,7 @@ public class Client
             if(player != null)
             {
                 UnityEngine.Object.Destroy(player.gameObject);
+                RoundManager.instance.currentPlayers--;
             }
             player = null;
         });

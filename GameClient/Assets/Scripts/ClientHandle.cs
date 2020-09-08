@@ -63,8 +63,11 @@ public class ClientHandle : MonoBehaviour
     {
         int _id = _packet.ReadInt();
 
-        Destroy(GameManager.players[_id].gameObject);
-        GameManager.players.Remove(_id);
+        if(GameManager.players[_id].gameObject != null)
+        {
+            Destroy(GameManager.players[_id].gameObject);
+            GameManager.players.Remove(_id);
+        }
     }
 
     public static void PlayerHealth(Packet _packet)
@@ -191,6 +194,10 @@ public class ClientHandle : MonoBehaviour
         int _winner = _packet.ReadInt();
 
         UIManager.instance.RoundEnd(_winner);
+        if (GameManager.players[Client.instance.myId] != null)
+        {
+            GameManager.players[Client.instance.myId].carryingWeapon = false;
+        }
     }
 
     public static void DrawedWeapon(Packet _packet)

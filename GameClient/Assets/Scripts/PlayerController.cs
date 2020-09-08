@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Mouse1))
         {
             ClientSend.PlayerDrawWeapon(0);
-            if (playerManager.carryingWeapon)
+            if (playerManager.carryingWeapon || !playerManager.carryingWeapon)
             {
                 if (playerManager.team == 0 || playerManager.team == 2)
                 {
