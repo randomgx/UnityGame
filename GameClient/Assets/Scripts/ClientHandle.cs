@@ -37,7 +37,11 @@ public class ClientHandle : MonoBehaviour
         float i = 0;
         i = Time.time * 40;
 
-        GameManager.players[_id].SetDesiredPosition(new TransformUpdate((int)i, _position));
+        if(GameManager.players.TryGetValue(_id, out PlayerManager _player))
+        {
+            //GameManager.players[_id].SetDesiredPosition(new TransformUpdate((int)i, _position));
+            _player.SetDesiredPosition(new TransformUpdate((int)i, _position));
+        }
 
         /*int _id = _packet.ReadInt();
         Vector3 _position = _packet.ReadVector3();

@@ -57,13 +57,16 @@ public class PlayerManager : MonoBehaviour
 
     public void SetDesiredPosition(TransformUpdate position)
     {
-        if(!interpolate)
+        if(!interpolate || health <= 0)
         {
             transform.position = position.position;
         }
         
-        futureUpdates.Add(position);
-        delayTick = position.tick - 4;
+        if(health > 0)
+        {
+            futureUpdates.Add(position);
+            delayTick = position.tick - 4;
+        }
     }
 
     private void Update()
@@ -110,7 +113,7 @@ public class PlayerManager : MonoBehaviour
 
         if (health <= 0f)
         {
-            interpolate = false;
+            //interpolate = false;
             Die();
         }
     }
@@ -179,7 +182,7 @@ public class PlayerManager : MonoBehaviour
             eye.SetActive(true);
         }
         carryingWeapon = false;
-        interpolate = true;
+        //interpolate = true;
         SetHealth(maxHealth);
     }
 }

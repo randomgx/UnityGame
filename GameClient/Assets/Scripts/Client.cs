@@ -102,6 +102,7 @@ public class Client : MonoBehaviour
             catch (Exception _ex)
             {
                 Debug.Log($"Error sending data to server via TCP: {_ex}");
+                Disconnect();
             }
         }
 
@@ -233,6 +234,8 @@ public class Client : MonoBehaviour
             }
             catch (Exception _ex)
             {
+                Disconnect();
+
                 Debug.Log($"Error sending data to server via UDP: {_ex}");
             }
         }
@@ -321,11 +324,17 @@ public class Client : MonoBehaviour
     /// <summary>Disconnects from the server and stops all network traffic.</summary>
     private void Disconnect()
     {
-        if (isConnected)
+        if (isConnected || !isConnected)
         {
             isConnected = false;
             tcp.socket.Close();
             udp.socket.Close();
+
+            Destroy(GameManager.players[Client.instance.myId].gameObject);
+            GameManager.players.Remove(Client.instance.myId);
+
+            UIManager.instance.OnScreenChange(UIManager.MenuScreen.UI_CONNECT);
+            UIManager.instance.StartCoroutine(UIManager.instance.Disconnected("Disconnected: lost connection with server"));
 
             Debug.Log("Disconnected from server.");
         }

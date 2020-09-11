@@ -23,6 +23,8 @@ public class UIManager : MonoBehaviour
     public Text topText;
     public Text countdownText;
 
+    public Text catchMessage;
+
     public bool startTimer;
     public float timeRemaining;
 
@@ -68,11 +70,22 @@ public class UIManager : MonoBehaviour
         {
             case MenuScreen.UI_CONNECT:
                 connectMenu.SetActive(true);
+                lobbyMenu.SetActive(false);
+                inGame.SetActive(false);
+
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+
                 break;
             case MenuScreen.UI_LOBBY:
                 lobbyMenu.SetActive(true);
+
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+
                 break;
             case MenuScreen.UI_INGAME:
+                connectMenu.SetActive(false);
                 inGame.SetActive(true);
                 break;
             case MenuScreen.UI_NONE:
@@ -89,6 +102,11 @@ public class UIManager : MonoBehaviour
             case 0:
                 topText.text = "Waiting for more players";
                 gameState = 0;
+
+                //countdown fix
+                countdownText.text = "";
+                startTimer = false;
+
                 break;
             case 1:
                 topText.text = "Round starts in:";
@@ -143,9 +161,16 @@ public class UIManager : MonoBehaviour
     /// <summary>Attempts to connect to the server.</summary>
     public void ConnectToServer()
     {
-        connectMenu.SetActive(false);
-        usernameField.interactable = false;
         Client.instance.ConnectToServer();
         OnScreenChange(MenuScreen.UI_INGAME);
+    }
+
+    public IEnumerator Disconnected(string msg)
+    {
+        catchMessage.text = msg;
+
+        yield return new WaitForSeconds(4);
+
+        catchMessage.text = "";
     }
 }

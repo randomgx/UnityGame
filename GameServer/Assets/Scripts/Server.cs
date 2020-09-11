@@ -97,6 +97,7 @@ public class Server
         catch (Exception _ex)
         {
             Debug.Log($"Error receiving UDP data: {_ex}");
+            Stop();
         }
     }
 

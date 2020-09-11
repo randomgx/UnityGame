@@ -11,19 +11,13 @@ ScriptsOnlyBuild:
     - TextFaceCamera
     - ThreadManager
     - UIManager
-    Unity.CollabProxy.Editor.dll:
-    - Unity.Cloud.Collaborate.UserInterface.WindowCache
     Unity.Rider.Editor.dll:
     - Packages.Rider.Editor.UnitTesting.CallbackData
-    Unity.Timeline.Editor.dll:
-    - TimelineProjectSettings
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.StateNode
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
@@ -79,41 +73,41 @@ ScriptsOnlyBuild:
     - Class: 108
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 11722}
+      Script: {instanceID: 11754}
     - Class: 114
-      Script: {instanceID: 11726}
+      Script: {instanceID: 11758}
     - Class: 114
-      Script: {instanceID: 11780}
+      Script: {instanceID: 11812}
     - Class: 114
-      Script: {instanceID: 11906}
+      Script: {instanceID: 11938}
     - Class: 114
-      Script: {instanceID: 11946}
+      Script: {instanceID: 11978}
     - Class: 114
-      Script: {instanceID: 12382}
+      Script: {instanceID: 12414}
     - Class: 114
-      Script: {instanceID: 12616}
+      Script: {instanceID: 12648}
     - Class: 114
-      Script: {instanceID: 12778}
+      Script: {instanceID: 12810}
     - Class: 114
-      Script: {instanceID: 12844}
+      Script: {instanceID: 12876}
     - Class: 114
-      Script: {instanceID: 13046}
+      Script: {instanceID: 13078}
     - Class: 114
-      Script: {instanceID: 13062}
+      Script: {instanceID: 13094}
     - Class: 114
-      Script: {instanceID: 13086}
+      Script: {instanceID: 13118}
     - Class: 114
-      Script: {instanceID: 13160}
+      Script: {instanceID: 13192}
     - Class: 114
-      Script: {instanceID: 13374}
+      Script: {instanceID: 13406}
     - Class: 114
-      Script: {instanceID: 13388}
+      Script: {instanceID: 13420}
     - Class: 114
-      Script: {instanceID: 13460}
+      Script: {instanceID: 13492}
     - Class: 114
-      Script: {instanceID: 13572}
+      Script: {instanceID: 13604}
     - Class: 114
-      Script: {instanceID: 13776}
+      Script: {instanceID: 13808}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
