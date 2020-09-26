@@ -14,19 +14,33 @@ public class Player : MonoBehaviour
     public float throwForce = 600f;
     public float health;
     public float maxHealth = 100f;
-    public int itemAmount = 0;
-    public int maxItemAmount = 3;
-
-    public bool carryingWeapon;
-    public float hitRange;
-    private bool weaponDraw;
 
     private bool[] inputs;
     private float yVelocity = 0;
 
-    //Team
+    public int itemAmount = 0;
+    public int maxItemAmount = 3;
+
+    #region Points
+    public int points;
+
+    private int killMurderer;
+    private int killDetective;
+    private int killBystander;
+    private int wrongKill;
+    #endregion
+
+    #region Weapons
+    public bool carryingWeapon;
+    [HideInInspector]
+    public float hitRange;
+    private bool weaponDraw;
+    #endregion
+
+    #region Teams
     public enum Team { Bystander, Murderer, Detective}
     public Team team;
+    #endregion
 
     private void Start()
     {
@@ -41,7 +55,12 @@ public class Player : MonoBehaviour
         username = _username;
         health = maxHealth;
 
-        if(RoundManager.instance.GetPlayerCount() >= RoundManager.instance.minimumPlayers && RoundManager.instance.rState != RoundManager.RoundState.COUNTDOWN)
+        killMurderer = RoundManager.instance.killMurdererPoints;
+        killDetective = RoundManager.instance.killDetectivePoints;
+        killBystander = RoundManager.instance.killBystanderPoints;
+        wrongKill = RoundManager.instance.wrongKillPoints;
+
+        if (RoundManager.instance.GetPlayerCount() >= RoundManager.instance.minimumPlayers && RoundManager.instance.rState != RoundManager.RoundState.COUNTDOWN)
         {
             RoundManager.instance.OnChangeRoundState(RoundManager.RoundState.COUNTDOWN);
         }
@@ -118,6 +137,52 @@ public class Player : MonoBehaviour
         transform.rotation = _rotation;
     }
 
+    public void ShootClient(Player _player)
+    {
+        if (health <= 0f || RoundManager.instance.rState != RoundManager.RoundState.PLAYING || !carryingWeapon || !weaponDraw)
+        {
+            return;
+        }
+
+        _player.TakeDamage(100f);
+
+        if (_player.team == Team.Bystander && team == Team.Detective)
+        {
+            points -= wrongKill;
+            ServerSend.HandleKill(this, (int)Team.Bystander);
+        }
+        //If murderer and kill a murderer --
+        else if (_player.team == Team.Murderer && team == Team.Murderer)
+        {
+            points -= wrongKill;
+            ServerSend.HandleKill(this, (int)Team.Murderer);
+        }
+        //if detective kill a murderer +++
+        else if (_player.team == Team.Murderer && team == Team.Detective)
+        {
+            points += killMurderer;
+            ServerSend.HandleKill(this, (int)Team.Murderer);
+        }
+        //if murderer kill a bystander ++
+        else if (_player.team == Team.Bystander && team == Team.Murderer)
+        {
+            points += killBystander;
+            ServerSend.HandleKill(this, (int)Team.Bystander);
+        }
+        //if murderer kill a detective +++
+        else if (_player.team == Team.Detective && team == Team.Murderer)
+        {
+            points += killDetective;
+            ServerSend.HandleKill(this, (int)Team.Detective);
+        }
+        //if detective kill a detective ---
+        else if (_player.team == Team.Detective && team == Team.Detective)
+        {
+            points -= wrongKill;
+            ServerSend.HandleKill(this, (int)Team.Detective);
+        }
+    }
+
     public void Shoot(Vector3 _viewDirection)
     {
         if (health <= 0f || RoundManager.instance.rState != RoundManager.RoundState.PLAYING || !carryingWeapon || !weaponDraw)
@@ -130,6 +195,43 @@ public class Player : MonoBehaviour
             if (_hit.collider.CompareTag("Player"))
             {
                 _hit.collider.GetComponent<Player>().TakeDamage(100f);
+                
+                //If detective and kill a bystander --
+                if (_hit.collider.GetComponent<Player>().team == Team.Bystander && team == Team.Detective)
+                {
+                    points -= wrongKill;
+                    ServerSend.HandleKill(this, (int)Team.Bystander);
+                }
+                //If murderer and kill a murderer --
+                else if (_hit.collider.GetComponent<Player>().team == Team.Murderer && team == Team.Murderer)
+                {
+                    points -= wrongKill;
+                    ServerSend.HandleKill(this, (int)Team.Murderer);
+                }
+                //if detective kill a murderer +++
+                else if (_hit.collider.GetComponent<Player>().team == Team.Murderer && team == Team.Detective)
+                {
+                    points += killMurderer;
+                    ServerSend.HandleKill(this, (int)Team.Murderer);
+                }
+                //if murderer kill a bystander ++
+                else if (_hit.collider.GetComponent<Player>().team == Team.Bystander && team == Team.Murderer)
+                {
+                    points += killBystander;
+                    ServerSend.HandleKill(this, (int)Team.Bystander);
+                }
+                //if murderer kill a detective +++
+                else if (_hit.collider.GetComponent<Player>().team == Team.Detective && team == Team.Murderer)
+                {
+                    points += killDetective;
+                    ServerSend.HandleKill(this, (int)Team.Detective);
+                }
+                //if detective kill a detective ---
+                else if (_hit.collider.GetComponent<Player>().team == Team.Detective && team == Team.Detective)
+                {
+                    points -= wrongKill;
+                    ServerSend.HandleKill(this, (int)Team.Detective);
+                }
             }
         }
     }

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3024847138724150361}
   - component: {fileID: 829117775900897876}
   - component: {fileID: 1719157270277483131}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -127,7 +127,7 @@ GameObject:
   - component: {fileID: 9188597805163286259}
   - component: {fileID: 127458034049663265}
   - component: {fileID: 5169203353878723458}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: username
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -254,7 +254,7 @@ GameObject:
   - component: {fileID: 7455574231334980082}
   - component: {fileID: 1919155995562736217}
   - component: {fileID: 2888799594428538753}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -353,7 +353,7 @@ GameObject:
   - component: {fileID: 8819256922348106597}
   - component: {fileID: 8283048436765457631}
   - component: {fileID: 6761221046541469059}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: LocalPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -396,15 +396,19 @@ MonoBehaviour:
   maxHealth: 100
   itemCount: 0
   model: {fileID: 829117775900897876}
+  eye: {fileID: 0}
   knife: {fileID: 2537143919887778409}
   pistol: {fileID: 1689355412983408452}
   knifeAnimator: {fileID: 5982361074668395862}
   pistolAnimator: {fileID: 3002158331563419461}
   team: 0
   carryingWeapon: 0
+  points: 0
+  oldPoints: 0
   delayTick: 0
   timeElapsed: 0
   timeToReachTarget: 0
+  localTick: 0
   interpolate: 1
 --- !u!114 &6761221046541469059
 MonoBehaviour:
@@ -419,6 +423,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camTransform: {fileID: 1243984683900922996}
+  range: 0
 --- !u!1 &8991547251181571686
 GameObject:
   m_ObjectHideFlags: 0
@@ -428,7 +433,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7937389247520046397}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Weapons
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -509,6 +514,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 1c8444f3f49273040b4be51abc97c1cf, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1c8444f3f49273040b4be51abc97c1cf, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1c8444f3f49273040b4be51abc97c1cf, type: 3}
@@ -596,6 +605,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 9806f0d80beb6b94188cf3b5367c6c23, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 9806f0d80beb6b94188cf3b5367c6c23, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9806f0d80beb6b94188cf3b5367c6c23, type: 3}

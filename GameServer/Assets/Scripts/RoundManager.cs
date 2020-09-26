@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using TMPro;
 using UnityEngine;
 using UnityEngine.XR.WSA.Input;
@@ -16,26 +17,39 @@ public class RoundManager : MonoBehaviour
 
     public List<WaitingPlayers> waitingPlayers = new List<WaitingPlayers>();
 
+    [Header("Player Configuration")]
     public int currentPlayers;
     public int minimumPlayers = 3;
 
     private bool countdownStarted;
+    [Header("Countdown and Timers")]
     public float countdownTime = 30;
     public float countdownCurrentTimer;
 
     private int murdererPlayer;
     private int detectivePlayer;
 
+    [Header("Roles Configuration")]
     public int murderersQuantity;
     public int detectivesQuantity;
 
     public List<int> murdererPlayers = new List<int>();
     public List<int> detectivePlayers = new List<int>();
+    [HideInInspector]
     public List<int> availPlayersId = new List<int>();
 
+    [HideInInspector]
     public int murderersAlive;
+    [HideInInspector]
     public int detectivesAlive;
+    [HideInInspector]
     public int bystandersAlive;
+
+    [Header("Points")]
+    public int killDetectivePoints;
+    public int killMurdererPoints;
+    public int killBystanderPoints;
+    public int wrongKillPoints;
 
     public enum RoundState
     {
@@ -46,6 +60,7 @@ public class RoundManager : MonoBehaviour
         RESTART
     }
 
+    [Header("Round State")]
     public RoundState rState;
 
     private void Awake()

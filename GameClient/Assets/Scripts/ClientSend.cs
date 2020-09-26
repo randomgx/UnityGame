@@ -60,6 +60,16 @@ public class ClientSend : MonoBehaviour
         }
     }
 
+    public static void PlayerShootClient(PlayerManager _player)
+    {
+        using (Packet _packet = new Packet((int)ClientPackets.playerShootClient))
+        {
+            _packet.Write(_player.id);
+
+            SendTCPData(_packet);
+        }
+    }
+
     public static void PlayerDrawWeapon(int _showing)
     {
         using (Packet _packet = new Packet((int)ClientPackets.playerDrawWeapon))

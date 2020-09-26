@@ -353,6 +353,10 @@ MonoBehaviour:
   murderersAlive: 0
   detectivesAlive: 0
   bystandersAlive: 0
+  killDetectivePoints: 100
+  killMurdererPoints: 100
+  killBystanderPoints: 50
+  wrongKillPoints: 80
   rState: 0
 --- !u!1001 &1549948732
 PrefabInstance:

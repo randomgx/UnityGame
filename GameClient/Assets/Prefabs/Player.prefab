@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6030683193728064831
 RectTransform:
   m_ObjectHideFlags: 0
@@ -387,7 +387,7 @@ GameObject:
   - component: {fileID: 8283048436765457631}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -435,9 +435,12 @@ MonoBehaviour:
   pistolAnimator: {fileID: 8253861913017589566}
   team: 0
   carryingWeapon: 0
+  points: 0
+  oldPoints: 0
   delayTick: 0
   timeElapsed: 0
   timeToReachTarget: 0
+  localTick: 0
   interpolate: 1
 --- !u!1001 &3233961199446198564
 PrefabInstance:

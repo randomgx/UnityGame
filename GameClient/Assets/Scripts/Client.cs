@@ -316,7 +316,8 @@ public class Client : MonoBehaviour
             { (int)ServerPackets.roundBystander, ClientHandle.RoundBystander },
             { (int)ServerPackets.roundCountdown, ClientHandle.RoundCountdown },
             { (int)ServerPackets.roundEnd, ClientHandle.RoundEnd },
-            { (int)ServerPackets.drawedWeapon, ClientHandle.DrawedWeapon }
+            { (int)ServerPackets.drawedWeapon, ClientHandle.DrawedWeapon },
+            { (int)ServerPackets.handleKill, ClientHandle.HandleKill }
         };
         Debug.Log("Initialized packets.");
     }
@@ -333,6 +334,13 @@ public class Client : MonoBehaviour
             Destroy(GameManager.players[Client.instance.myId].gameObject);
             GameManager.players.Remove(Client.instance.myId);
 
+            foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player"))
+            {
+                Destroy(go);
+                GameManager.players.Remove(go.GetComponent<PlayerManager>().id);
+            }
+
+            UIManager.instance.gameState = 0;
             UIManager.instance.OnScreenChange(UIManager.MenuScreen.UI_CONNECT);
             UIManager.instance.StartCoroutine(UIManager.instance.Disconnected("Disconnected: lost connection with server"));
 

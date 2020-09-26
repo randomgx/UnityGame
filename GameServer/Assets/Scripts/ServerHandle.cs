@@ -59,6 +59,13 @@ public class ServerHandle
         Server.clients[_fromClient].player.Shoot(_shootDirection);
     }
 
+    public static void PlayerShootClient(int _fromClient, Packet _packet)
+    {
+        int _id = _packet.ReadInt();
+
+        Server.clients[_fromClient].player.ShootClient(Server.clients[_id].player);
+    }
+
     public static void PlayerDrawWeapon(int _fromClient, Packet _packet)
     {
         int _showing = _packet.ReadInt();

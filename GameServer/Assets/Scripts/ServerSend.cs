@@ -299,5 +299,17 @@ public class ServerSend
             SendUDPDataToAll(_id, _packet);
         }
     }
+
+    public static void HandleKill(Player _player, int _killedTeam)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.handleKill))
+        {
+            _packet.Write(_player.points);
+            _packet.Write(_killedTeam);
+
+
+            SendTCPData(_player.id, _packet);
+        }
+    }
     #endregion
 }

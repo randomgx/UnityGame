@@ -6,6 +6,7 @@ public class TextFaceCamera : MonoBehaviour
 {
     void Update()
     {
+        if(this.transform != null)
         this.transform.LookAt(Camera.main.transform);
     }
 }

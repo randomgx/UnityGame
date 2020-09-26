@@ -25,6 +25,8 @@ public class UIManager : MonoBehaviour
 
     public Text catchMessage;
 
+    public Text killText;
+
     public bool startTimer;
     public float timeRemaining;
 
@@ -123,6 +125,7 @@ public class UIManager : MonoBehaviour
                 break;
             case 4:
                 gameState = 4;
+                preLobby.SetActive(true);
                 teamText.text = "";
                 topText.text = "Restarting round...";
                 GameManager.players[Client.instance.myId].carryingWeapon = false;
@@ -172,5 +175,49 @@ public class UIManager : MonoBehaviour
         yield return new WaitForSeconds(4);
 
         catchMessage.text = "";
+    }
+
+    public IEnumerator Kill(int _team, int _killedTeam, int _points)
+    {
+        switch (_team)
+        {
+            case 0:
+                break;
+            case 1:
+                switch (_killedTeam)
+                {
+                    case 0:
+                        killText.text = ("You killed a BYSTANDER! +" + _points);
+                        break;
+                    case 1:
+                        killText.text = ("You wrong killed a MURDERER! -" + _points);
+                        break;
+                    case 2:
+                        killText.text = ("You killed a DETECTIVE! +" + _points);
+                        break;
+                }
+                break;
+            case 2:
+                switch (_killedTeam)
+                {
+                    case 0:
+                        killText.text = ("You wrong killed a BYSTANDER! -" + _points);
+                        break;
+                    case 1:
+                        killText.text = ("You killed a MURDERER! +" + _points);
+                        break;
+                    case 2:
+                        killText.text = ("You wrong killed a DETECTIVE! -" + _points);
+                        break;
+                }
+                break;
+        }
+
+        killText.GetComponent<Animator>().SetBool("kill", true);
+
+        yield return new WaitForSeconds(4);
+        killText.GetComponent<Animator>().SetBool("kill", false);
+
+        killText.text = "";
     }
 }

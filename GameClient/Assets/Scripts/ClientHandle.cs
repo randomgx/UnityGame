@@ -212,4 +212,15 @@ public class ClientHandle : MonoBehaviour
 
         GameManager.players[_id].DrawWeapon(_showing, _weapon);
     }
+
+    public static void HandleKill(Packet _packet)
+    {
+        int _points = _packet.ReadInt();
+        int _killedTeam = _packet.ReadInt();
+
+        if (GameManager.players[Client.instance.myId] != null)
+        {
+            GameManager.players[Client.instance.myId].HandleKill(_points, _killedTeam);
+        }
+    }
 }

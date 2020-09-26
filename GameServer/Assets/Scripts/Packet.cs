@@ -26,7 +26,8 @@ public enum ServerPackets
     roundBystander,
     roundCountdown,
     roundEnd,
-    drawedWeapon
+    drawedWeapon,
+    handleKill
 }
 
 /// <summary>Sent from client to server.</summary>
@@ -35,6 +36,7 @@ public enum ClientPackets
     welcomeReceived = 1,
     playerMovement,
     playerShoot,
+    playerShootClient,
     playerDrawWeapon
 }
 

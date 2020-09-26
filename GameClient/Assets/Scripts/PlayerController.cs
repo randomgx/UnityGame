@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public Transform camTransform;
+    public float range;
 
     private PlayerManager playerManager;
 
@@ -15,9 +16,19 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        //For now, we're full trusting the client.
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            ClientSend.PlayerShoot(camTransform.forward);
+            playerManager.knifeAnimator.SetTrigger("attack");
+            playerManager.pistolAnimator.SetTrigger("attack");
+            if (Physics.Raycast(camTransform.position, camTransform.forward, out RaycastHit _hit, range))
+            {
+                if(_hit.transform.parent.CompareTag("Player"))
+                {
+                    ClientSend.PlayerShootClient(_hit.collider.GetComponentInParent<PlayerManager>());
+                }
+            }
+            //ClientSend.PlayerShoot(camTransform.forward);
         }
 
         if (Input.GetKeyUp(KeyCode.Mouse1))

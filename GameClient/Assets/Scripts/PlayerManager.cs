@@ -26,13 +26,16 @@ public class PlayerManager : MonoBehaviour
 
     public int team;
     public bool carryingWeapon;
+    public int points;
+    [HideInInspector]
+    public int oldPoints;
 
     #region Interpolation
     //Interpolation
     public int delayTick;
     public float timeElapsed;
     public float timeToReachTarget;
-    private int localTick;
+    public int localTick;
     private TransformUpdate to;
     private TransformUpdate from;
     private TransformUpdate previous;
@@ -155,11 +158,24 @@ public class PlayerManager : MonoBehaviour
         if(team == 1)
         {
             activeWeapon = knife;
+            GetComponent<PlayerController>().range = 2f;
         }
         else
         {
             activeWeapon = pistol;
+            GetComponent<PlayerController>().range = 30f;
         }
+    }
+
+    public void HandleKill(int _points, int _killedTeam)
+    {
+        oldPoints = points;
+        points = _points;
+
+        int _tempPoints = points - oldPoints;
+
+        //Points are being stored client and server side, but we may have to rethink how it works, so we're not showing it on screen right now
+        //UIManager.instance.StartCoroutine(UIManager.instance.Kill(team, _killedTeam, _tempPoints));
     }
 
     public void Die()

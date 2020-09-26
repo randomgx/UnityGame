@@ -16,8 +16,10 @@ ScriptsOnlyBuild:
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.StateNode
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
@@ -73,41 +75,41 @@ ScriptsOnlyBuild:
     - Class: 108
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 11754}
+      Script: {instanceID: 11764}
     - Class: 114
-      Script: {instanceID: 11758}
+      Script: {instanceID: 11768}
     - Class: 114
-      Script: {instanceID: 11812}
+      Script: {instanceID: 11824}
     - Class: 114
-      Script: {instanceID: 11938}
+      Script: {instanceID: 11954}
     - Class: 114
-      Script: {instanceID: 11978}
+      Script: {instanceID: 11996}
     - Class: 114
-      Script: {instanceID: 12414}
+      Script: {instanceID: 12440}
     - Class: 114
-      Script: {instanceID: 12648}
+      Script: {instanceID: 12678}
     - Class: 114
-      Script: {instanceID: 12810}
+      Script: {instanceID: 12842}
     - Class: 114
-      Script: {instanceID: 12876}
+      Script: {instanceID: 12910}
     - Class: 114
-      Script: {instanceID: 13078}
+      Script: {instanceID: 13114}
     - Class: 114
-      Script: {instanceID: 13094}
+      Script: {instanceID: 13130}
     - Class: 114
-      Script: {instanceID: 13118}
+      Script: {instanceID: 13154}
     - Class: 114
-      Script: {instanceID: 13192}
+      Script: {instanceID: 13230}
     - Class: 114
-      Script: {instanceID: 13406}
+      Script: {instanceID: 13444}
     - Class: 114
-      Script: {instanceID: 13420}
+      Script: {instanceID: 13458}
     - Class: 114
-      Script: {instanceID: 13492}
+      Script: {instanceID: 13530}
     - Class: 114
-      Script: {instanceID: 13604}
+      Script: {instanceID: 13646}
     - Class: 114
-      Script: {instanceID: 13808}
+      Script: {instanceID: 13854}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -355,7 +357,7 @@ ScriptsOnlyBuild:
     className: ScrollRect
   - hash:
       serializedVersion: 2
-      Hash: 6177a2f89b36d53e7c1656c459c26d1f
+      Hash: 871ce8e760a3657754752ae07c77fbe4
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PlayerController
@@ -379,7 +381,7 @@ ScriptsOnlyBuild:
     className: RemoteTestResultSender
   - hash:
       serializedVersion: 2
-      Hash: e01862469e57b9b6975a8d5260197a60
+      Hash: c103ddfb5175a20a1086a934fd89995e
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: UIManager
@@ -493,7 +495,7 @@ ScriptsOnlyBuild:
     className: AudioTrack
   - hash:
       serializedVersion: 2
-      Hash: 411fe3fedd93ca12b2e3b792b2645608
+      Hash: 3d5cb177bc26ce68e0212cec5974d2af
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PlayerManager
