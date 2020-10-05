@@ -88,6 +88,14 @@ public class ServerSend
         }
     }
 
+    public static void ReceivePing(int _id)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.receivePing))
+        {
+            SendUDPData(_id, _packet);
+        }
+    }
+
     /// <summary>Tells a client to spawn a player.</summary>
     /// <param name="_toClient">The client that should spawn the player.</param>
     /// <param name="_player">The player to spawn.</param>
@@ -100,7 +108,7 @@ public class ServerSend
             _packet.Write(_player.transform.position);
             _packet.Write(_player.transform.rotation);
 
-            SendUDPData(_toClient, _packet);
+            SendTCPData(_toClient, _packet);
         }
     }
 
@@ -125,6 +133,7 @@ public class ServerSend
         {
             _packet.Write(_player.id);
             _packet.Write(_player.transform.rotation);
+            _packet.Write(_player.camRotation);
 
             SendUDPDataToAll(_player.id, _packet);
         }
@@ -244,7 +253,7 @@ public class ServerSend
         {
             _packet.Write(_id);
 
-            SendUDPData(_id, _packet);
+            SendUDPDataToAll(_packet);
         }
     }
 
@@ -254,7 +263,7 @@ public class ServerSend
         {
             _packet.Write(_id);
 
-            SendUDPData(_id, _packet);
+            SendUDPDataToAll(_packet);
         }
     }
 
@@ -288,15 +297,27 @@ public class ServerSend
         }
     }
 
-    public static void DrawedWeapon(int _id, int _showing, int _weapon)
+    public static void DrawedItem(int _id, string _name, bool _draw)
     {
-        using (Packet _packet = new Packet((int)ServerPackets.drawedWeapon))
+        using (Packet _packet = new Packet((int)ServerPackets.drawedItem))
         {
             _packet.Write(_id);
-            _packet.Write(_showing);
-            _packet.Write(_weapon);
+            _packet.Write(_name);
+            _packet.Write(_draw);
 
-            SendUDPDataToAll(_id, _packet);
+            SendUDPDataToAll(_packet);
+        }
+    }
+
+    public static void EquippedItem(int _id, string _name, bool _equipped)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.equippedItem))
+        {
+            _packet.Write(_id);
+            _packet.Write(_name);
+            _packet.Write(_equipped);
+
+            SendUDPDataToAll(_packet);
         }
     }
 
@@ -308,7 +329,16 @@ public class ServerSend
             _packet.Write(_killedTeam);
 
 
-            SendTCPData(_player.id, _packet);
+            SendUDPData(_player.id, _packet);
+        }
+    }
+
+    public static void PlayerSetSpectate(int _id, bool _spectating)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.playerSetSpectate))
+        {
+            _packet.Write(_spectating);
+            SendTCPData(_id, _packet);
         }
     }
     #endregion

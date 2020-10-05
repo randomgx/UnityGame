@@ -342,7 +342,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentPlayers: 0
-  minimumPlayers: 4
+  minimumPlayers: 3
   countdownTime: 20
   countdownCurrentTimer: 0
   murderersQuantity: 1
@@ -707,6 +707,8 @@ MonoBehaviour:
   playerPrefab: {fileID: 4187005777591049097, guid: 28356974c7337f046a4d87eaf2777d62, type: 3}
   enemyPrefab: {fileID: 4187005777591049097, guid: 9304265d43a31f043bb49ce027fa06b2, type: 3}
   projectilePrefab: {fileID: 7859153389591767978, guid: f08613b9a5c37044f8cb2ad66a833ea6, type: 3}
+  murdererWeapon: {fileID: 3953989446270461479, guid: 182a123d5a2a704499741e7b1ccfd619, type: 3}
+  detectiveWeapon: {fileID: 2707378465026247703, guid: 3e9d64b66df308d4484d78195fd7b4fb, type: 3}
 --- !u!4 &1902706400
 Transform:
   m_ObjectHideFlags: 0

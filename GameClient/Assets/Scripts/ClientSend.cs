@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -30,6 +31,8 @@ public class ClientSend : MonoBehaviour
             _packet.Write(UIManager.instance.usernameField.text);
 
             SendTCPData(_packet);
+            NetworkDebug.instance.packetsSent.Add(_packet);
+            NetworkDebug.instance.AddSentByte(_packet.Length());
         }
     }
 
@@ -45,8 +48,11 @@ public class ClientSend : MonoBehaviour
                 _packet.Write(_input);
             }
             _packet.Write(GameManager.players[Client.instance.myId].transform.rotation);
+            _packet.Write(GameManager.players[Client.instance.myId].camTransform.rotation);
 
             SendUDPData(_packet);
+            NetworkDebug.instance.packetsSent.Add(_packet);
+            NetworkDebug.instance.AddSentByte(_packet.Length());
         }
     }
 
@@ -57,6 +63,8 @@ public class ClientSend : MonoBehaviour
             _packet.Write(_facing);
 
             SendTCPData(_packet);
+            NetworkDebug.instance.packetsSent.Add(_packet);
+            NetworkDebug.instance.AddSentByte(_packet.Length());
         }
     }
 
@@ -66,17 +74,33 @@ public class ClientSend : MonoBehaviour
         {
             _packet.Write(_player.id);
 
-            SendTCPData(_packet);
+            SendUDPData(_packet);
+            NetworkDebug.instance.packetsSent.Add(_packet);
+            NetworkDebug.instance.AddSentByte(_packet.Length());
         }
     }
 
-    public static void PlayerDrawWeapon(int _showing)
+    public static void PlayerDrawItem(bool _drawn)
     {
-        using (Packet _packet = new Packet((int)ClientPackets.playerDrawWeapon))
+        using (Packet _packet = new Packet((int)ClientPackets.playerDrawItem))
         {
-            _packet.Write(_showing);
+            //work to do
+            _packet.Write(_drawn);
 
             SendUDPData(_packet);
+
+            NetworkDebug.instance.packetsSent.Add(_packet);
+            NetworkDebug.instance.AddSentByte(_packet.Length());
+        }
+    }
+
+    public static void SendPing()
+    {
+        using (Packet _packet = new Packet((int)ClientPackets.sendPing))
+        {
+            NetworkDebug.instance.time = 0;
+            SendUDPData(_packet);
+            NetworkDebug.instance.ping = true;
         }
     }
     #endregion

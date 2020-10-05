@@ -109,6 +109,8 @@ public class UIManager : MonoBehaviour
                 countdownText.text = "";
                 startTimer = false;
 
+                GameManager.instance.ClearEveryWeapon();
+
                 break;
             case 1:
                 topText.text = "Round starts in:";
@@ -128,7 +130,6 @@ public class UIManager : MonoBehaviour
                 preLobby.SetActive(true);
                 teamText.text = "";
                 topText.text = "Restarting round...";
-                GameManager.players[Client.instance.myId].carryingWeapon = false;
                 break;
         }
     }
@@ -159,6 +160,11 @@ public class UIManager : MonoBehaviour
     public void HandleBystanderState()
     {
         teamText.text = "Bystander";
+    }
+
+    public void HandleSpectating(string _name)
+    {
+        teamText.text = $"Spectating: {_name}";
     }
 
     /// <summary>Attempts to connect to the server.</summary>

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -48,7 +49,9 @@ public class ServerHandle
             _inputs[i] = _packet.ReadBool();
         }
         Quaternion _rotation = _packet.ReadQuaternion();
+        Quaternion _camRotation = _packet.ReadQuaternion();
 
+        Server.clients[_fromClient].player.camRotation = _camRotation;
         Server.clients[_fromClient].player.SetInput(_inputs, _rotation);
     }
 
@@ -66,10 +69,15 @@ public class ServerHandle
         Server.clients[_fromClient].player.ShootClient(Server.clients[_id].player);
     }
 
-    public static void PlayerDrawWeapon(int _fromClient, Packet _packet)
+    public static void PlayerDrawItem(int _fromClient, Packet _packet)
     {
-        int _showing = _packet.ReadInt();
+        bool _drawn = _packet.ReadBool();
 
-        Server.clients[_fromClient].player.DrawWeapon(_showing);
+        Server.clients[_fromClient].player.DrawItem(_drawn);
+    }
+
+    public static void SendPing(int _fromClient, Packet _packet)
+    {
+        ServerSend.ReceivePing(_fromClient);
     }
 }

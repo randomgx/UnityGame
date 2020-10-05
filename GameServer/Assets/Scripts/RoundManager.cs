@@ -185,8 +185,7 @@ public class RoundManager : MonoBehaviour
             {
                 murdererPlayer = Server.clients[murdererPlayers[murdererPlayers.Count - 1]].id;
                 Server.clients[murdererPlayer].player.team = Player.Team.Murderer;
-                Server.clients[murdererPlayer].player.hitRange = 2f;
-                Server.clients[murdererPlayer].player.carryingWeapon = true;
+                Server.clients[murdererPlayer].player.AddItem(NetworkManager.instance.murdererWeapon, true);
                 availPlayersId.Clear();
                 ServerSend.RoundMurderer(murdererPlayer);
             }
@@ -207,8 +206,7 @@ public class RoundManager : MonoBehaviour
             {
                 detectivePlayer = Server.clients[detectivePlayers[detectivePlayers.Count - 1]].id;
                 Server.clients[detectivePlayer].player.team = Player.Team.Detective;
-                Server.clients[detectivePlayer].player.hitRange = 30f;
-                Server.clients[detectivePlayer].player.carryingWeapon = true;
+                Server.clients[detectivePlayer].player.AddItem(NetworkManager.instance.detectiveWeapon, true);
                 availPlayersId.Clear();
                 ServerSend.RoundDetective(detectivePlayer);
             }
@@ -263,7 +261,7 @@ public class RoundManager : MonoBehaviour
             if (_client.player != null && _client.player.team == Player.Team.Bystander)
             {
                 bystandersAlive++;
-                _client.player.hitRange = 30f;
+                //_client.player.hitRange = 30f;
                 ServerSend.RoundBystander(_client.id);
             }
         }
@@ -302,14 +300,21 @@ public class RoundManager : MonoBehaviour
                     StartCoroutine(_client.player.Respawn());
                 }
                 _client.player.team = Player.Team.Bystander;
-                _client.player.carryingWeapon = false;
+                _client.player.items.Clear();
+                _client.player.currentItemIndex = -1;
 
                 _client.player.controller.enabled = false;
-                _client.player.transform.position = new Vector3(0f, 25f, 0f);
+                _client.player.transform.position = new Vector3(0f, 2f, 0f);
                 _client.player.controller.enabled = true;
 
-                ServerSend.DrawedWeapon(_client.id, 0, 0);
-                ServerSend.DrawedWeapon(_client.id, 0, 1);
+                if(_client.player.team == Player.Team.Murderer)
+                {
+                    ServerSend.DrawedItem(_client.id, "Knife", false);
+                }
+                else if (_client.player.team == Player.Team.Detective)
+                {
+                    ServerSend.DrawedItem(_client.id, "Pistol", false);
+                }
             }
         }
 

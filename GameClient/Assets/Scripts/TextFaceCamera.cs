@@ -6,7 +6,17 @@ public class TextFaceCamera : MonoBehaviour
 {
     void Update()
     {
-        if(this.transform != null)
-        this.transform.LookAt(Camera.main.transform);
+        if (transform != null && Camera.main != null)
+        {
+            transform.LookAt(Camera.main.transform);
+        }
+        else if(Camera.current != null)
+        {
+            transform.LookAt(Camera.current.transform);
+        }
+        else
+        {
+            return;
+        }
     }
 }

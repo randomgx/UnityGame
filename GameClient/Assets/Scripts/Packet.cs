@@ -26,8 +26,11 @@ public enum ServerPackets
     roundBystander,
     roundCountdown,
     roundEnd,
-    drawedWeapon,
-    handleKill
+    drawedItem,
+    equippedItem,
+    handleKill,
+    receivePing,
+    playerSetSpectate
 }
 
 /// <summary>Sent from client to server.</summary>
@@ -37,7 +40,8 @@ public enum ClientPackets
     playerMovement,
     playerShoot,
     playerShootClient,
-    playerDrawWeapon
+    playerDrawItem,
+    sendPing
 }
 
 public class Packet : IDisposable

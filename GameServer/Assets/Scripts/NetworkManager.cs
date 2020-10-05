@@ -10,6 +10,9 @@ public class NetworkManager : MonoBehaviour
     public GameObject enemyPrefab;
     public GameObject projectilePrefab;
 
+    public Item murdererWeapon;
+    public Item detectiveWeapon;
+
     private void Awake()
     {
         if (instance == null)

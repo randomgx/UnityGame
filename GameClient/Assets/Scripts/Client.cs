@@ -316,8 +316,11 @@ public class Client : MonoBehaviour
             { (int)ServerPackets.roundBystander, ClientHandle.RoundBystander },
             { (int)ServerPackets.roundCountdown, ClientHandle.RoundCountdown },
             { (int)ServerPackets.roundEnd, ClientHandle.RoundEnd },
-            { (int)ServerPackets.drawedWeapon, ClientHandle.DrawedWeapon },
-            { (int)ServerPackets.handleKill, ClientHandle.HandleKill }
+            { (int)ServerPackets.drawedItem, ClientHandle.DrawedItem },
+            { (int)ServerPackets.equippedItem, ClientHandle.EquippedItem },
+            { (int)ServerPackets.handleKill, ClientHandle.HandleKill },
+            { (int)ServerPackets.receivePing, ClientHandle.ReceivePing },
+            { (int)ServerPackets.playerSetSpectate, ClientHandle.SetSpectate }
         };
         Debug.Log("Initialized packets.");
     }

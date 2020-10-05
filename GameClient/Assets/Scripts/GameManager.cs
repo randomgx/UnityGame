@@ -10,10 +10,16 @@ public class GameManager : MonoBehaviour
     public static Dictionary<int, ItemSpawner> itemSpawners = new Dictionary<int, ItemSpawner>();
     public static Dictionary<int, ProjectileManager> projectiles = new Dictionary<int, ProjectileManager>();
 
+    public static List<int> spectatblePlayersIds = new List<int>();
+
+
     public GameObject localPlayerPrefab;
     public GameObject playerPrefab;
     public GameObject itemSpawnerPrefab;
     public GameObject projectilePrefab;
+
+    public GameObject murdererItem;
+    public GameObject detectiveItem;
 
     private void Awake()
     {
@@ -61,5 +67,18 @@ public class GameManager : MonoBehaviour
         GameObject _projectile = Instantiate(projectilePrefab, _position, Quaternion.identity);
         _projectile.GetComponent<ProjectileManager>().Initialize(_id);
         projectiles.Add(_id, _projectile.GetComponent<ProjectileManager>());
+    }
+
+    public void ClearEveryWeapon()
+    {
+        foreach (var _player in players)
+        {
+            foreach (Item _item in _player.Value.items)
+            {
+                Destroy(_item.gameObject);
+            }
+            _player.Value.currentItemIndex = -1;
+            _player.Value.items.Clear();
+        }
     }
 }

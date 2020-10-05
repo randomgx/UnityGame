@@ -140,6 +140,7 @@ MonoBehaviour:
   itemAmount: 0
   maxItemAmount: 3
   points: 0
+  items: []
   carryingWeapon: 0
   hitRange: 0
   team: 0

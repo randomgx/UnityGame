@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -21,6 +22,10 @@ public class Player : MonoBehaviour
     public int itemAmount = 0;
     public int maxItemAmount = 3;
 
+    [HideInInspector] public Quaternion camRotation;
+
+    [SerializeField] bool spectating;
+
     #region Points
     public int points;
 
@@ -30,11 +35,9 @@ public class Player : MonoBehaviour
     private int wrongKill;
     #endregion
 
-    #region Weapons
-    public bool carryingWeapon;
-    [HideInInspector]
-    public float hitRange;
-    private bool weaponDraw;
+    #region Items
+    public List<Item> items = new List<Item>();
+    public int currentItemIndex = -1;
     #endregion
 
     #region Teams
@@ -124,8 +127,8 @@ public class Player : MonoBehaviour
         _moveDirection.y = yVelocity;
         controller.Move(_moveDirection);
 
-        ServerSend.PlayerPosition(this);
         ServerSend.PlayerRotation(this);
+        ServerSend.PlayerPosition(this); //send only moving players later
     }
 
     /// <summary>Updates the player input with newly received input.</summary>
@@ -139,12 +142,12 @@ public class Player : MonoBehaviour
 
     public void ShootClient(Player _player)
     {
-        if (health <= 0f || RoundManager.instance.rState != RoundManager.RoundState.PLAYING || !carryingWeapon || !weaponDraw)
+        if (health <= 0f || RoundManager.instance.rState != RoundManager.RoundState.PLAYING || !items[currentItemIndex].IsEquipped() || !items[currentItemIndex].IsDrawn())
         {
             return;
         }
 
-        _player.TakeDamage(100f);
+        _player.TakeDamage(items[currentItemIndex].info.damage);
 
         if (_player.team == Team.Bystander && team == Team.Detective)
         {
@@ -185,12 +188,12 @@ public class Player : MonoBehaviour
 
     public void Shoot(Vector3 _viewDirection)
     {
-        if (health <= 0f || RoundManager.instance.rState != RoundManager.RoundState.PLAYING || !carryingWeapon || !weaponDraw)
+        if (health <= 0f || RoundManager.instance.rState != RoundManager.RoundState.PLAYING || !items[currentItemIndex].IsEquipped() || !items[currentItemIndex].IsDrawn())
         {
             return;
         }
 
-        if (Physics.Raycast(shootOrigin.position, _viewDirection, out RaycastHit _hit, hitRange))
+        if (Physics.Raycast(shootOrigin.position, _viewDirection, out RaycastHit _hit, 10))
         {
             if (_hit.collider.CompareTag("Player"))
             {
@@ -236,40 +239,41 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void DrawWeapon(int _showing)
+    public void Equip(int _index)
     {
-        if (health <= 0f || !carryingWeapon)
+        if(currentItemIndex == -1)
+        {
+            currentItemIndex = _index;
+            items[_index].SetEquipped(id, true);
+        }
+        else
+        {
+            items[currentItemIndex].SetEquipped(id, false);
+            items[_index].SetEquipped(id, true);
+        }
+    }
+
+    public void DrawItem(bool _draw)
+    {
+        if(health <= 0 || currentItemIndex == -1)
         {
             return;
         }
 
-        if(RoundManager.instance.rState == RoundManager.RoundState.PLAYING)
+        items[currentItemIndex].SetDraw(id, _draw);
+    }
+
+    public void AddItem(Item _item)
+    {
+        items.Add(_item);
+    }
+
+    public void AddItem(Item _item, bool _active)
+    {
+        items.Add(_item);
+        if (_active)
         {
-            switch (_showing)
-            {
-                case 0:
-                    if(team == Team.Bystander || team == Team.Detective)
-                    {
-                        ServerSend.DrawedWeapon(id, 0, 0);
-                    }
-                    else
-                    {
-                        ServerSend.DrawedWeapon(id, 0, 1);
-                    }
-                    weaponDraw = false;
-                    break;
-                case 1:
-                    if (team == Team.Bystander || team == Team.Detective)
-                    {
-                        ServerSend.DrawedWeapon(id, 1, 0);
-                    }
-                    else
-                    {
-                        ServerSend.DrawedWeapon(id, 1, 1);
-                    }
-                    weaponDraw = true;
-                    break;
-            }
+            Equip(items.Count - 1);
         }
     }
 
@@ -284,11 +288,16 @@ public class Player : MonoBehaviour
         if (health <= 0f)
         {
             health = 0f;
+            items.Clear();
+            currentItemIndex = -1;
             controller.enabled = false;
-            transform.position = new Vector3(0f, 25f, 0f);
+            transform.position = new Vector3(0f, 2f, 0f);
             ServerSend.PlayerPosition(this);
 
-            if(team == Team.Murderer)
+            ServerSend.PlayerSetSpectate(id, true);
+            spectating = true;
+
+            if (team == Team.Murderer)
             {
                 RoundManager.instance.murderersAlive--;
                 if(RoundManager.instance.murderersAlive <= 0)
@@ -310,7 +319,7 @@ public class Player : MonoBehaviour
 
     public void DropWeapon()
     {
-        carryingWeapon = false;
+        //carryingWeapon = false;
     }
 
     public IEnumerator Respawn()
@@ -319,6 +328,8 @@ public class Player : MonoBehaviour
 
         health = maxHealth;
         controller.enabled = true;
+        spectating = false;
+        ServerSend.PlayerSetSpectate(id, false);
         ServerSend.PlayerRespawned(this);
     }
 

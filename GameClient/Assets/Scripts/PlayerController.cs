@@ -5,7 +5,6 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public Transform camTransform;
-    public float range;
 
     private PlayerManager playerManager;
 
@@ -19,32 +18,30 @@ public class PlayerController : MonoBehaviour
         //For now, we're full trusting the client.
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            playerManager.knifeAnimator.SetTrigger("attack");
-            playerManager.pistolAnimator.SetTrigger("attack");
-            if (Physics.Raycast(camTransform.position, camTransform.forward, out RaycastHit _hit, range))
+            if(playerManager.items.Count > 0 && playerManager.health > 0 && UIManager.instance.gameState == 2)
             {
-                if(_hit.transform.parent.CompareTag("Player"))
+                if(playerManager.items[playerManager.currentItemIndex] != null)
                 {
-                    ClientSend.PlayerShootClient(_hit.collider.GetComponentInParent<PlayerManager>());
+                    //do animation here
+                    if (Physics.Raycast(camTransform.position, camTransform.forward, out RaycastHit _hit, playerManager.items[playerManager.currentItemIndex].info.range))
+                    {
+                        if (_hit.transform.parent.CompareTag("Player"))
+                        {
+                            ClientSend.PlayerShootClient(_hit.collider.GetComponentInParent<PlayerManager>());
+                        }
+                    }
+                    //ClientSend.PlayerShoot(camTransform.forward);
                 }
             }
-            //ClientSend.PlayerShoot(camTransform.forward);
+            else if(playerManager.health <= 0)
+            {
+                playerManager.CycleSpectator();
+            }
         }
 
         if (Input.GetKeyUp(KeyCode.Mouse1))
         {
-            ClientSend.PlayerDrawWeapon(0);
-            if (playerManager.carryingWeapon || !playerManager.carryingWeapon)
-            {
-                if (playerManager.team == 0 || playerManager.team == 2)
-                {
-                    playerManager.DrawWeapon(0, 0);
-                }
-                else
-                {
-                    playerManager.DrawWeapon(0, 1);
-                }
-            }
+            ClientSend.PlayerDrawItem(false);
         }
 
         if (UIManager.instance.gameState != 2)
@@ -54,18 +51,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Mouse1))
         {
-            ClientSend.PlayerDrawWeapon(1);
-            if(playerManager.carryingWeapon)
-            {
-                if (playerManager.team == 0 || playerManager.team == 2)
-                {
-                    playerManager.DrawWeapon(1, 0);
-                }
-                else
-                {
-                    playerManager.DrawWeapon(1, 1);
-                }
-            }
+            ClientSend.PlayerDrawItem(true);
         }
     }
 
